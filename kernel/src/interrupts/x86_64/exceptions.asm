@@ -31,7 +31,6 @@ extern hex2str
 
 
 %macro panic 1
-    pop rax         ; Return address (We do not need it)
     call write_red
 
     mov rdi, panic_msg1
@@ -44,9 +43,6 @@ extern hex2str
     call kwrite
 
     mov rdi, newline
-    call kwrite
-
-    mov rdi, panic_msg2
     call kwrite
 
     mov rdi, ifd_msg
@@ -74,9 +70,9 @@ extern hex2str
     mov rdi, __ss
     call kwrite
     write_reg
-    
-    cli             ; Clear interrupt flag.
-    hlt             ; Halt the CPU.
+
+    cli
+    hlt
 %endmacro    
 
 
@@ -127,9 +123,9 @@ fpe_handler:
 
 
 panic_msg1: db "FATAL CPU EXCEPTION: ", 0
-panic_msg2: db "** KERNEL PANIC **", 0xD, 0xA, 0
+panic_msg2: db "** KERNEL PANIC **", 0xA, 0
 ifd_msg: db 0xD, 0xA, "<==== Interrupt Frame State ====>", 0, 0xD, 0xA
-newline: db 0xD, 0xA
+newline: db 0xD, 0xA, 0
 
 __rip: db "RIP: ", 0
 __cs: db "CS: ", 0
