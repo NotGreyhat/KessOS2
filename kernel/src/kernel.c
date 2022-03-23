@@ -6,6 +6,8 @@
 #include <interrupts/exceptions.h>
 #include <acpi/acpi.h>
 #include <pic/pic-legacy.h>
+#include <drivers/ps2/Keyboard.h>
+#include <IO/IO.h>
 
 
 static uint8_t stack[4000];
@@ -93,18 +95,23 @@ void _start(struct stivale2_struct* ss) {
     idt_set_vector(0xD, gpf_handler);
     idt_set_vector(0xE, page_fault_handler);
     idt_set_vector(0xF, fpe_handler);
+    idt_set_vector(0x21, keyboard_isr);
     idt_install();
+    acpi_init(rsdp_tag);        // Init ACPI.
+    
+    extern acpi_madt_t* madt;    
 
-    acpi_init(rsdp_tag);
-
-    extern acpi_madt_t* madt;
+    __asm__ __volatile__("sti");
 
     // If MADT is NULL we will just use legacy PIC.
     if (!(madt)) {
         kwrite("Using legacy hardware!\n");     // Display a nice little message saying we are using legacy.
         pic_init();
+
+        // We would want to unmask keyboard IRQ.
+        outportb(LEGACY_PIC1_DATA, inportb(LEGACY_PIC1_DATA) ^ (1 << 1));
     }
-    
+
     while (1) {
         __asm__ __volatile__("hlt");
     }
