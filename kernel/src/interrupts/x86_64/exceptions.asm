@@ -98,7 +98,7 @@ device_not_avail_handler:
     panic 0x7
 
 double_fault_handler:
-    panic 0x7
+    panic 0x8
 
 cso_handler:
     panic 0x9
