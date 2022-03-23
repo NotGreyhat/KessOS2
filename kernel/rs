@@ -9,7 +9,7 @@ PROTOCOL=stivale2
 
 # Path to the kernel to boot. boot:/// represents the partition on which limine.cfg is located.
 KERNEL_PATH=boot:///kernel.elf
-BACKGROUND_PATH=boot:///kf.bmp
+BACKGROUND_PATH=boot:///xeno.bmp
 BACKGROUND_STYLE=transpearent
 BACKDROP_COLOUR=008080
 THEME_BACKGROUND=50000000
