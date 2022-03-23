@@ -1,5 +1,5 @@
-#ifndef __FRAMEBUFFER_H__
-#define __FRAMEBUFFER_H__
+#ifndef __VIDEO_FRAMEBUFFER_H__
+#define __VIDEO_FRAMEBUFFER_H__
 
 
 void kwrite(const char* str);
