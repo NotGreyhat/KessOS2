@@ -5,3 +5,4 @@ kernel/limine
 logfile.txt
 *.bin
 *.elf
+kernel/KessOS/limine.cfg
