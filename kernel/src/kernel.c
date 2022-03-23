@@ -4,6 +4,8 @@
 #include <util/string.h>
 #include <interrupts/IDT.h>
 #include <interrupts/exceptions.h>
+#include <acpi/acpi.h>
+#include <pic/pic-legacy.h>
 
 
 static uint8_t stack[4000];
@@ -67,6 +69,8 @@ void kwrite(const char* str) {
 
 void _start(struct stivale2_struct* ss) {
     struct stivale2_struct_tag_terminal* term_tag = get_tag(ss, STIVALE2_STRUCT_TAG_TERMINAL_ID);
+    struct stivale2_struct_tag_rsdp* rsdp_tag = get_tag(ss, STIVALE2_STRUCT_TAG_RSDP_ID);
+
     if (!(term_tag)) {
         __asm__ __volatile__("cli; hlt");
     }
@@ -90,6 +94,16 @@ void _start(struct stivale2_struct* ss) {
     idt_set_vector(0xE, page_fault_handler);
     idt_set_vector(0xF, fpe_handler);
     idt_install();
+
+    acpi_init(rsdp_tag);
+
+    extern acpi_madt_t* madt;
+
+    // If MADT is NULL we will just use legacy PIC.
+    if (!(madt)) {
+        kwrite("Using legacy hardware!\n");     // Display a nice little message saying we are using legacy.
+        pic_init();
+    }
     
     while (1) {
         __asm__ __volatile__("hlt");
