@@ -113,6 +113,7 @@ ssf_handler:
     panic 0xC
 
 gpf_handler:
+    pop rax         ; Pop this value off stack so it doesn't mess with debug messages.
     panic 0xD
 
 page_fault_handler:
