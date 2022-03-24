@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <util/string.h>
 #include <util/stivale2.h>
+#include <drivers/video/Framebuffer.h>
 
 void acpi_init(struct stivale2_struct_tag_rsdp* rsdp_tag);
 

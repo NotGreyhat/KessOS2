@@ -12,6 +12,7 @@ void acpi_init(struct stivale2_struct_tag_rsdp* rsdp_tag) {
         acpi_madt_t* _madt = (acpi_madt_t*)(uint64_t)rsdt->tables[tableidx];
         if (strncmp(_madt->header.signature, "APIC", 4)) {
             madt = _madt;
+            break;
         }
 
         ++tableidx;
